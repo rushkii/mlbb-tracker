@@ -1,3 +1,3 @@
-import { loginSchema, type LoginSchema } from './form';
+import { loginSchema, otpSchema, type LoginSchema, type OTPSchema } from './form';
 
-export { loginSchema, type LoginSchema };
+export { loginSchema, otpSchema, type LoginSchema, type OTPSchema };
