@@ -1,5 +1,17 @@
 <script lang="ts">
-  import { useAuth } from '$lib/stores/authStore';
+  import { goto } from '$app/navigation';
+  import { authStore } from '$lib/stores/authStore';
+  import { onMount } from 'svelte';
+  import OtpForm from '$lib/components/custom/otp-form.svelte';
+  import type { ActionData, PageServerData } from './$types';
+  import { browser } from '$app/environment';
+
+  export let data: PageServerData;
+  export let form: ActionData;
+
+  $: if (browser && !$authStore.authenticating) {
+    goto('/auth/login');
+  }
 </script>
 
-OTP Page: {$useAuth}
+<OtpForm data={data.form} />

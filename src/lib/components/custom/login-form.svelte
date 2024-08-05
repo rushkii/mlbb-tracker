@@ -3,6 +3,7 @@
   import * as Form from '$lib/components/ui/form';
   import { Input } from '$lib/components/ui/input';
   import { loginSchema, type LoginSchema } from '$lib/schemas';
+  import { authStore } from '$lib/stores/authStore';
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
 
@@ -15,6 +16,14 @@
   });
 
   const { form: formData, enhance, delayed, allErrors } = form;
+
+  $: if ($formData.roleId.length !== 0 && $formData.zoneId.length !== 0) {
+    authStore.update(() => ({
+      roleId: $formData.roleId,
+      zoneId: $formData.zoneId,
+      authenticating: true
+    }));
+  }
 </script>
 
 <div class="flex h-full w-full items-center justify-center">
