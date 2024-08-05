@@ -47,7 +47,7 @@
         </div>
 
         <div class="pt-3">
-          <ul class="space-y-1 text-sm text-red-500">
+          <ul class="text-sm text-red-500">
             {#each $allErrors as err}
               {#each err.messages as msg}
                 <li class="list-inside list-disc">{msg}</li>
