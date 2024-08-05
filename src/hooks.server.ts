@@ -20,7 +20,7 @@ export const handle = (async ({ event, resolve }) => {
 }) satisfies Handle;
 
 export const handleFetch = (async ({ event, request, fetch }) => {
-  if (event.url.pathname.startsWith('/api/auth')) return await fetch(request.url);
+  if (event.url.pathname.startsWith('/api/auth')) return fetch(request.url);
 
   if (request.url.includes('mobilelegends.com')) {
     const token = '';
@@ -33,8 +33,8 @@ export const handleFetch = (async ({ event, request, fetch }) => {
         'x-token': token
       }
     });
-    return await fetch(modified);
+    return fetch(modified);
   }
 
-  return await fetch(request);
+  return fetch(request);
 }) satisfies HandleFetch;
