@@ -9,9 +9,15 @@
   export let data: PageServerData;
   export let form: ActionData;
 
-  $: if (browser && !$authStore.authenticating) {
-    goto('/auth/login');
+  $: {
+    if (browser && !$authStore.authenticating) {
+      goto('/auth/login');
+    }
+
+    if (form?.success) {
+      goto('/');
+    }
   }
 </script>
 
-<OtpForm data={data.form} />
+<OtpForm data={data.form} {...$authStore} />

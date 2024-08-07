@@ -2,15 +2,17 @@ import { parseJwt } from '$lib/utils';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
-  const { headers } = event.request;
-  const authorization = headers.get('authorization');
+  const authorization = event.cookies.get('tkn');
 
   if (authorization) {
     const token = authorization.replace('Bearer ', '');
 
     try {
       const data = parseJwt(token);
-      event.locals.user = data.Ext;
+      event.locals['user'] = {
+        account: data.Ext,
+        token
+      };
     } catch {
       console.log('error JWT');
     }
@@ -20,21 +22,19 @@ export const handle = (async ({ event, resolve }) => {
 }) satisfies Handle;
 
 export const handleFetch = (async ({ event, request, fetch }) => {
-  if (event.url.pathname.startsWith('/api/auth')) return fetch(request.url);
+  if (event.url.pathname.startsWith('/api/auth')) return fetch(request);
+  if (!event.url.pathname.startsWith('/api/hero')) return fetch(request);
+  if (!event.locals?.user) return fetch(request);
 
-  if (request.url.includes('mobilelegends.com')) {
-    const token = '';
+  const token = event.locals?.user.token as string;
+  const modified = new Request(request, {
+    ...request,
+    method: 'POST',
+    headers: {
+      authorization: token,
+      'x-token': token
+    }
+  });
 
-    const modified = new Request(request, {
-      ...request,
-      method: 'POST',
-      headers: {
-        authorization: token,
-        'x-token': token
-      }
-    });
-    return fetch(modified);
-  }
-
-  return fetch(request);
+  return fetch(modified);
 }) satisfies HandleFetch;

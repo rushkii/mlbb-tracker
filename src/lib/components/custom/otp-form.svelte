@@ -19,9 +19,15 @@
   let value = '';
 
   const delay = ['delay-0', 'delay-100', 'delay-200', 'delay-300'];
+  // const statusStyle = {}
 
-  const handleOtpComplete = (otp: string) => {
+  const handleOtpComplete = async (otp: string) => {
     isComplete = true;
+
+    // console.log(form.validateForm({}))
+
+    $formData.otp = otp;
+
     Array.from(otpInputsRef.children).forEach((el, i) => {
       if (i === otpInputsRef.children.length - 1) {
         el.classList.remove('ring-2', 'ring-ring', 'ring-offset-background');
@@ -37,6 +43,8 @@
         }, 400);
       }, 600);
     });
+
+    form.submit();
   };
 
   const form = superForm(data, {
@@ -63,45 +71,45 @@
 
     <form method="POST" use:enhance>
       <Card.Content>
-        <Form.Field {form} name="otp">
-          <Form.Control>
-            <OTPRoot
-              bind:this={otpRootRef}
-              bind:value
-              maxLength={4}
-              autoFocus={true}
-              onComplete={handleOtpComplete}
-              className="flex justify-center items-center gap-2"
-            >
-              <div bind:this={otpInputsRef} class="flex items-center">
+        <OTPRoot
+          bind:this={otpRootRef}
+          bind:value
+          maxLength={4}
+          autoFocus={true}
+          onComplete={handleOtpComplete}
+          className="flex justify-center items-center gap-2"
+        >
+          <Form.Field {form} name="otp">
+            <Form.Control let:attrs>
+              <div bind:this={otpInputsRef} {...attrs} class="flex items-center">
                 <OTPInput
                   index={0}
                   className="relative flex h-20 w-16 items-center justify-center border-y border-r text-3xl
-                  transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
+                    transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
                   focusClassName="z-10 ring-2 ring-ring ring-offset-background"
                 />
                 <OTPInput
                   index={1}
                   className="relative flex h-20 w-16 items-center justify-center border-y border-r text-3xl
-                  transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
+                      transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
                   focusClassName="z-10 ring-2 ring-ring ring-offset-background"
                 />
                 <OTPInput
                   index={2}
                   className="relative flex h-20 w-16 items-center justify-center border-y border-r text-3xl
-                  transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
+                      transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
                   focusClassName="z-10 ring-2 ring-ring ring-offset-background"
                 />
                 <OTPInput
                   index={3}
                   className="relative flex h-20 w-16 items-center justify-center border-y border-r text-3xl
-                  transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
+                      transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
                   focusClassName="z-10 ring-2 ring-ring ring-offset-background"
                 />
               </div>
-            </OTPRoot>
-          </Form.Control>
-        </Form.Field>
+            </Form.Control>
+          </Form.Field>
+        </OTPRoot>
 
         <div class="pt-3">
           <ul class="space-y-1 text-sm text-red-500">

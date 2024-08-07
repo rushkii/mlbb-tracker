@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store';
 
 interface AuthStore {
-  roleId: string | number;
-  zoneId: string | number;
+  roleId: string;
+  zoneId: string;
   authenticating: boolean;
 }
 
