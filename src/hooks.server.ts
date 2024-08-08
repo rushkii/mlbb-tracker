@@ -26,7 +26,7 @@ export const handleFetch = (async ({ event, request, fetch }) => {
   if (!event.url.pathname.startsWith('/api/hero')) return fetch(request);
   if (!event.locals?.user) return fetch(request);
 
-  const token = event.locals?.user.token as string;
+  const token = event.locals?.user.token;
   const modified = new Request(request, {
     ...request,
     method: 'POST',
