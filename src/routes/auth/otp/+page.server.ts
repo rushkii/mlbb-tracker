@@ -12,7 +12,7 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
   default: async (event) => {
     const form = await superValidate(event, zod(otpSchema));
-    const data = JSON.parse(event.cookies.get('tmp')!);
+    const data = JSON.parse(event.cookies.get('mlbb-tracker-tmp')!);
 
     const structuredData = {
       roleId: data.roleId,
@@ -37,6 +37,8 @@ export const actions: Actions = {
       method: 'POST',
       body: body
     });
+
+    console.log(res)
 
     if (!res.ok) return fail(400, response);
 
