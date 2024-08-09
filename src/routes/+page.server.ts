@@ -7,9 +7,7 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
   const res = await fetch('/api/hero/winrate');
   if (!res.ok) return { success: false };
 
-  const data = await res.json();
-  return {
-    success: true,
-    ...data.data
-  };
+  const { data }: BaseResponse<AccountInfo> = await res.json();
+
+  return { success: true, ...data };
 };

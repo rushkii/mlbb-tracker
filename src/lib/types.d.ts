@@ -1,6 +1,6 @@
-interface LoginResponse {
+interface BaseResponse<D> {
   code: number;
-  data?: LoginData;
+  data?: D;
   msg: string;
 }
 
@@ -15,4 +15,13 @@ interface LoginData {
   time: number;
   token: string;
   zoneid: number;
+}
+
+interface AccountInfo {
+  avatar: string;
+  level: number;
+  name: string;
+  reg_country: string;
+  roleId: number;
+  zoneId: number;
 }

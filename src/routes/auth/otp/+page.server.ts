@@ -40,7 +40,7 @@ export const actions: Actions = {
 
     if (!res.ok) return fail(400, response);
 
-    const json: LoginResponse = await res.json();
+    const json: BaseResponse<LoginData> = await res.json();
     if (json.code !== 0) return fail(400, response);
 
     event.cookies.delete('mlbb-tracker-tmp', {
