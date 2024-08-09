@@ -38,8 +38,6 @@ export const actions: Actions = {
       body: body
     });
 
-    console.log(res)
-
     if (!res.ok) return fail(400, response);
 
     const json: LoginResponse = await res.json();
