@@ -20,8 +20,8 @@
       <Avatar.Root class="h-28 w-28">
         <Avatar.Image
           class="mask mask-image"
-          src="{data.avatar}"
-          alt="@rushkii"
+          src={data.avatar}
+          alt="{data.name} - avatar"
           draggable="false"
         />
         <Avatar.Fallback>YLIJ</Avatar.Fallback>

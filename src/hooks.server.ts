@@ -2,7 +2,7 @@ import { parseJwt } from '$lib/utils';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
-  const authorization = event.cookies.get('tkn');
+  const authorization = event.cookies.get('mlbb-tracker-tkn');
 
   if (authorization) {
     const token = authorization.replace('Bearer ', '');

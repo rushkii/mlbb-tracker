@@ -10,22 +10,35 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
 
   export let data: SuperValidated<Infer<OTPSchema>>;
+  export let success: boolean | undefined = undefined;
 
   let otpRootRef: any;
   let otpInputsRef: HTMLDivElement;
-  let isComplete: boolean = false;
+  const otpLength = 4 as const;
 
   // Set start value
   let value = '';
 
-  const delay = ['delay-0', 'delay-100', 'delay-200', 'delay-300'];
-  // const statusStyle = {}
+  const delay = ['delay-0', 'delay-[50ms]', 'delay-100', 'delay-150'];
+
+  const animateOtp = (elements: HTMLCollection, isSuccess: boolean, cb?: () => void) => {
+    let borderColor: string;
+
+    if (isSuccess) borderColor = 'border-green-500';
+    else borderColor = 'border-red-500';
+
+    Array.from(elements).forEach((el, i) => {
+      if (i === otpInputsRef.children.length - 1) {
+        el.classList.remove('ring-2', 'ring-ring', 'ring-offset-background');
+      }
+
+      el.classList.add('border-2', borderColor, delay[i]);
+    });
+
+    cb?.();
+  };
 
   const handleOtpComplete = async (otp: string) => {
-    isComplete = true;
-
-    // console.log(form.validateForm({}))
-
     $formData.otp = otp;
 
     Array.from(otpInputsRef.children).forEach((el, i) => {
@@ -33,18 +46,19 @@
         el.classList.remove('ring-2', 'ring-ring', 'ring-offset-background');
       }
 
-      el.classList.add('border-2', 'border-green-500', 'text-5xl', delay[i]);
+      el.classList.add('border-2', 'border-neutral-500', 'text-5xl', delay[i]);
 
       setTimeout(() => {
-        el.classList.remove('border-2', 'border-green-500', 'text-5xl');
-
-        setTimeout(() => {
-          el.classList.add('border-2', 'border-green-500');
-        }, 400);
+        el.classList.remove('border-2', 'border-neutral-500', 'text-5xl');
+        form.submit();
       }, 600);
     });
+  };
 
-    form.submit();
+  const handleOtpChange = () => {
+    Array.from(otpInputsRef.children).forEach((el, _) => {
+      el.classList.remove('border-2', 'border-neutral-500', 'border-red-500', 'border-green-500');
+    });
   };
 
   const form = superForm(data, {
@@ -53,12 +67,24 @@
     delayMs: 0
   });
 
-  const { form: formData, enhance, delayed, allErrors } = form;
+  const { form: formData, enhance, allErrors } = form;
 
   onMount(() => {
     if (!$authStore) goto('/auth/login');
   });
+
+  $: if (success) {
+    animateOtp(otpInputsRef.children, success, () => {
+      setTimeout(() => {
+        goto('/');
+      }, 500);
+    });
+  } else if (!success && success !== undefined) {
+    animateOtp(otpInputsRef.children, success);
+  }
 </script>
+
+{success}
 
 <div class="flex h-full w-full items-center justify-center">
   <Card.Root class="w-[30rem] p-6">
@@ -74,38 +100,23 @@
         <OTPRoot
           bind:this={otpRootRef}
           bind:value
-          maxLength={4}
-          autoFocus={true}
+          maxLength={otpLength}
+          autoFocus
+          on:change={handleOtpChange}
           onComplete={handleOtpComplete}
           className="flex justify-center items-center gap-2"
         >
           <Form.Field {form} name="otp">
             <Form.Control let:attrs>
               <div bind:this={otpInputsRef} {...attrs} class="flex items-center">
-                <OTPInput
-                  index={0}
-                  className="relative flex h-20 w-16 items-center justify-center border-y border-r text-3xl
-                    transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
-                  focusClassName="z-10 ring-2 ring-ring ring-offset-background"
-                />
-                <OTPInput
-                  index={1}
-                  className="relative flex h-20 w-16 items-center justify-center border-y border-r text-3xl
-                      transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
-                  focusClassName="z-10 ring-2 ring-ring ring-offset-background"
-                />
-                <OTPInput
-                  index={2}
-                  className="relative flex h-20 w-16 items-center justify-center border-y border-r text-3xl
-                      transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
-                  focusClassName="z-10 ring-2 ring-ring ring-offset-background"
-                />
-                <OTPInput
-                  index={3}
-                  className="relative flex h-20 w-16 items-center justify-center border-y border-r text-3xl
-                      transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
-                  focusClassName="z-10 ring-2 ring-ring ring-offset-background"
-                />
+                {#each Array(otpLength) as _, i}
+                  <OTPInput
+                    index={i}
+                    className="relative flex h-20 w-16 items-center justify-center border-y border-r text-3xl
+                  transition-all duration-300 first:rounded-l-md first:border-l last:rounded-r-md"
+                    focusClassName="z-10 ring-2 ring-ring ring-offset-background"
+                  />
+                {/each}
               </div>
             </Form.Control>
           </Form.Field>

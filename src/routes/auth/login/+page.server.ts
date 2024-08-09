@@ -31,7 +31,7 @@ export const actions: Actions = {
       variables: form.data,
 
       onComplete() {
-        event.cookies.set('tmp', JSON.stringify(form.data), {
+        event.cookies.set('mlbb-tracker-tmp', JSON.stringify(form.data), {
           httpOnly: true,
           secure: true,
           sameSite: 'strict',

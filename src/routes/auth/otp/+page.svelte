@@ -13,11 +13,7 @@
     if (browser && !$authStore.authenticating) {
       goto('/auth/login');
     }
-
-    if (form?.success) {
-      goto('/');
-    }
   }
 </script>
 
-<OtpForm data={data.form} {...$authStore} />
+<OtpForm data={data.form} success={form?.success} {...$authStore} />
