@@ -57,4 +57,32 @@ export const flyAndScale = (
 
 export const parseJwt = (token: string) => {
   return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-}
+};
+
+export const jsonToFormData = (data: Record<string, unknown>) => {
+  const body = new FormData();
+
+  Object.keys(data).forEach((key) => {
+    const value = data[key];
+    if (Array.isArray(value)) {
+      // If the key is 'files' and its value is an array
+      value.forEach((val) => {
+        if (val !== undefined && val !== null) {
+          body.append(
+            key,
+            typeof val === 'object' && !(val instanceof File) ? JSON.stringify(val) : String(val)
+          );
+        }
+      });
+    } else if (value !== undefined && value !== null) {
+      body.append(
+        key,
+        typeof value === 'object' && !(value instanceof File)
+          ? JSON.stringify(value)
+          : String(value)
+      );
+    }
+  });
+
+  return body;
+};
