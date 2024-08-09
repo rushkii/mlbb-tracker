@@ -28,14 +28,14 @@
 
 <div class="flex h-full w-full items-center justify-center">
   <Card.Root class="w-[30rem] p-6">
-    <Card.Header class="mb-10 gap-y-2 p-0 text-center">
-      <Card.Title class="font-beaufort-bold text-5xl uppercase">Login</Card.Title>
-      <Card.Description class="text-base">Login to show your detailed profile</Card.Description>
+    <Card.Header class="mb-10 p-0 text-center">
+      <Card.Title class="font-beaufort-bold text-3xl md:text-4xl uppercase">Login</Card.Title>
+      <Card.Description class="text-base text-balance">Login to show your detailed profile</Card.Description>
     </Card.Header>
 
     <form method="POST" use:enhance>
-      <Card.Content>
-        <div class="flex items-center gap-x-2">
+      <Card.Content class="px-0">
+        <div class="flex flex-col sm:flex-row items-center gap-2">
           <div class="w-full">
             <Form.Field {form} name="roleId">
               <Form.Control let:attrs>
@@ -45,7 +45,7 @@
             </Form.Field>
           </div>
 
-          <div>
+          <div class="w-full sm:w-max">
             <Form.Field {form} name="zoneId">
               <Form.Control let:attrs>
                 <Form.Label>Server ID</Form.Label>
